@@ -1,0 +1,6 @@
+{
+    "extends": "tslint-config-byungi",
+    "rules": {
+        "no-console": false
+    }
+}
