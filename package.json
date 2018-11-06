@@ -9,14 +9,14 @@
     "devDependencies": {
         "@types/react": "^16.4.18",
         "@types/warning": "^3.0.0",
-        "inno-trans": "^2.0.2",
+        "inno-trans": "^2.0.3",
         "react": "^16.6.0",
         "tslint": "^5.11.0",
         "tslint-config-byungi": "^0.0.8",
         "typescript": "^3.1.6"
     },
     "peerDependencies": {
-        "inno-trans": "^2.0.0",
+        "inno-trans": "^2.0.3",
         "react": "^16.6.0"
     },
     "dependencies": {

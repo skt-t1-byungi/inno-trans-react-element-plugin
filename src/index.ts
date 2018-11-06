@@ -1,10 +1,10 @@
-import { ITranslator } from 'inno-trans/lib/Translator'
-import { TransOptions, ValueMap } from 'inno-trans/lib/types'
+import { ITranslator, TransOptions, ValueMap } from 'inno-trans/lib/types'
 import { createElement, Fragment, isValidElement, ReactElement } from 'react'
 import warning from 'warning'
 
 type AnyReactElement = ReactElement<any>
-declare module 'inno-trans/lib/Translator' {
+
+declare module 'inno-trans/lib/types' {
     interface ITranslator {
         rt (key: string, values: ValueMap, opts: TransOptions): AnyReactElement
         rtc (key: string, num: number, values: ValueMap, opts: TransOptions): AnyReactElement
@@ -44,14 +44,16 @@ function reactTranceChoice (this: ITranslator, key: string,num: number, values: 
 
 function attachReactElements (message: string) {
     const strings = message.split(ZERO_WIDTH_CHAR)
+
     warning(
         strings.length > REACT_ELEMENTS.length + 1,
-        `[inno-trans-react-node-plugin]
+        `[inno-trans-react-element-plugin]
         This plugin uses "ZWNJ(\\u0200c)".
         If the message contains "ZWNJ", it will not work.`
     )
 
     const children: Array<string | AnyReactElement> = []
+
     for (const str of strings) {
         children.push(str)
         const reactElem = REACT_ELEMENTS.shift()
