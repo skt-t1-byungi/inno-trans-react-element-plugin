@@ -1,64 +1,38 @@
 import { ITranslator, TransOptions, ValueMap } from 'inno-trans/lib/types'
-import { createElement, Fragment, isValidElement, ReactElement } from 'react'
-import warning from 'warning'
+import { cloneElement, createElement, Fragment, ReactElement, ReactNode } from 'react'
+import parseTag from 'tag-name-parser'
 
-type AnyReactElement = ReactElement<any>
-
-interface ITranslatorWithReact extends ITranslator {
-    rt (key: string, values?: ValueMap, opts?: TransOptions): AnyReactElement
-    rtc (key: string, num: number, values?: ValueMap, opts?: TransOptions): AnyReactElement
+type TagNode = ReturnType<typeof parseTag>[number]
+interface ReactTranslator {
+    rt (key: string, values: ValueMap, opts?: TransOptions): ReactElement<any>
+    rtc (key: string, num: number, values: ValueMap, opts?: TransOptions): ReactElement<any>
 }
 
-const ZERO_WIDTH_CHAR = '\u0200c'
-let REACT_ELEMENTS: AnyReactElement[] = []
-
-export = (t: ITranslator) => {
-    const tr = t as ITranslatorWithReact
-    tr.addFilter('*', collectReactElement)
+export = <T extends ITranslator>(t: T): T & ReactTranslator => {
+    const tr = t as T & ReactTranslator
     tr.rt = reactTrans
     tr.rtc = reactTranceChoice
     return tr
 }
 
-function collectReactElement (value: any) {
-    if (!isValidElement(value)) return value
-    REACT_ELEMENTS.push(value)
-    return ZERO_WIDTH_CHAR
+function reactTrans (this: ITranslator, key: string, values: ValueMap, opts?: TransOptions) {
+    return strToReactElement(this.trans(key, values, opts), values)
 }
 
-function reactTrans (this: ITranslator, key: string, values?: ValueMap, opts?: TransOptions) {
-    try {
-        return attachReactElements(this.trans(key, values, opts))
-    } finally {
-        REACT_ELEMENTS = []
-    }
+function reactTranceChoice (this: ITranslator, key: string, num: number, values: ValueMap, opts?: TransOptions) {
+    return strToReactElement(this.transChoice(key, num, values, opts), values)
 }
 
-function reactTranceChoice (this: ITranslator, key: string,num: number, values?: ValueMap, opts?: TransOptions) {
-    try {
-        return attachReactElements(this.transChoice(key, num, values, opts))
-    } finally {
-        REACT_ELEMENTS = []
-    }
+function strToReactElement (str: string, values: ValueMap) {
+    return createElement(Fragment, undefined, ...nodesToReactNodes(parseTag(str), values))
 }
 
-function attachReactElements (message: string) {
-    const strings = message.split(ZERO_WIDTH_CHAR)
+function nodesToReactNodes (nodes: TagNode[], values: ValueMap): ReactNode[] {
+    return nodes.map(node => nodeToReactNode(node, values))
+}
 
-    warning(
-        strings.length > REACT_ELEMENTS.length + 1,
-        '[inno-trans-react-element-plugin]\n' +
-        'This plugin uses "ZWNJ(\\u0200c)".\n' +
-        'If the message contains "ZWNJ", it will not work.\n'
-    )
-
-    const children: Array<string | AnyReactElement> = []
-
-    for (const str of strings) {
-        children.push(str)
-        const reactEl = REACT_ELEMENTS.shift()
-        if (reactEl) children.push(reactEl)
-    }
-
-    return createElement(Fragment, undefined, ...children)
+function nodeToReactNode (node: TagNode, values: ValueMap): ReactNode {
+    if (typeof node === 'string') return node
+    if (node.single) return values[node.name]
+    return cloneElement(values[node.name], undefined, ...nodesToReactNodes(node.children, values))
 }
