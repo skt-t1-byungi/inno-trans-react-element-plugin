@@ -1,17 +1,20 @@
 {
     "name": "inno-trans-react-element-plugin",
+    "repository": "https://github.com/skt-t1-byungi/inno-trans-react-element-plugin.git",
+    "author": "skt-t1-byungi <tiniwz@gmail.com>",
     "version": "0.0.0",
     "main": "lib/index.js",
     "license": "MIT",
     "scripts": {
+        "test": "ava",
         "build": "tsc",
-        "test": "ava"
+        "prepublishOnly": "npm run build"
     },
     "devDependencies": {
         "@types/react": "^16.7.17",
         "@types/warning": "^3.0.0",
         "ava": "^1.0.0-rc.2",
-        "inno-trans": "^2.0.5",
+        "inno-trans": "^2.1.2",
         "react": "^16.6.3",
         "ts-node": "^7.0.1",
         "tslint": "^5.11.0",
@@ -28,7 +31,7 @@
     },
     "ava": {
         "extensions": [
-            "ts"
+            "tsx"
         ],
         "compileEnhancements": false,
         "require": [

@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "target": "es5",
     "module": "commonjs",
     "lib": ["es2015"],
     "outDir": "./lib",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "strictBindCallApply": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true
   },
   "include": [
       "./src"

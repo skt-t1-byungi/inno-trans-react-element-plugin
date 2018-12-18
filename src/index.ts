@@ -3,16 +3,18 @@ import { cloneElement, createElement, Fragment, ReactElement, ReactNode } from '
 import parseTag from 'tag-name-parser'
 
 type TagNode = ReturnType<typeof parseTag>[number]
-interface ReactTranslator {
-    rt (key: string, values: ValueMap, opts?: TransOptions): ReactElement<any>
-    rtc (key: string, num: number, values: ValueMap, opts?: TransOptions): ReactElement<any>
+
+declare module 'inno-trans/lib/types' {
+    interface ITranslator {
+        rt (key: string, values: ValueMap, opts?: TransOptions): ReactElement<any>
+        rtc (key: string, num: number, values: ValueMap, opts?: TransOptions): ReactElement<any>
+    }
 }
 
-export = <T extends ITranslator>(t: T): T & ReactTranslator => {
-    const tr = t as T & ReactTranslator
-    tr.rt = reactTrans
-    tr.rtc = reactTranceChoice
-    return tr
+export = (trans: ITranslator): ITranslator => {
+    trans.rt = reactTrans
+    trans.rtc = reactTranceChoice
+    return trans
 }
 
 function reactTrans (this: ITranslator, key: string, values: ValueMap, opts?: TransOptions) {
