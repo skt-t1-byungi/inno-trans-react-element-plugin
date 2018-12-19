@@ -13,7 +13,7 @@
     ],
     "repository": "https://github.com/skt-t1-byungi/inno-trans-react-element-plugin.git",
     "author": "skt-t1-byungi <tiniwz@gmail.com>",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "main": "lib/index.js",
     "files": [
         "lib"
