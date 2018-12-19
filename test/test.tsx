@@ -34,6 +34,16 @@ test('nested', macro,
     <>ab<div>de<p>ef</p>gh</div></>
 )
 
+test('if no value #1', macro,
+    rt('hello<0/>world', {}),
+    <>hello<></>world</>
+)
+
+test('if no value #2', macro,
+    rt('hello<0>world</0>', {}),
+    <>hello<>world</></>
+)
+
 test('rtc', macro,
     rtc('single|many', 2, { 0: <br /> }),
     <>many<br/>test</>

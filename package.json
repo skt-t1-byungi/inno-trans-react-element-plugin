@@ -1,9 +1,24 @@
 {
     "name": "inno-trans-react-element-plugin",
+    "description": "inno-trans plugin for react element interpolation.",
+    "keywords": [
+        "inno-trans",
+        "plugin",
+        "i18n",
+        "localization",
+        "react",
+        "html",
+        "tag",
+        "interpolation"
+    ],
     "repository": "https://github.com/skt-t1-byungi/inno-trans-react-element-plugin.git",
     "author": "skt-t1-byungi <tiniwz@gmail.com>",
     "version": "0.0.0",
     "main": "lib/index.js",
+    "files": [
+        "lib"
+    ],
+    "types": "lib/index.d.ts",
     "license": "MIT",
     "scripts": {
         "test": "ava",
@@ -14,7 +29,7 @@
         "@types/react": "^16.7.17",
         "@types/warning": "^3.0.0",
         "ava": "^1.0.0-rc.2",
-        "inno-trans": "^2.1.2",
+        "inno-trans": "^2.1.3",
         "react": "^16.6.3",
         "ts-node": "^7.0.1",
         "tslint": "^5.11.0",

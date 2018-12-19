@@ -1,5 +1,5 @@
 import { ITranslator, TransOptions, ValueMap } from 'inno-trans/lib/types'
-import { cloneElement, createElement, Fragment, ReactElement, ReactNode } from 'react'
+import { cloneElement, createElement, Fragment, isValidElement, ReactElement, ReactNode } from 'react'
 import parseTag from 'tag-name-parser'
 
 type TagNode = ReturnType<typeof parseTag>[number]
@@ -35,6 +35,7 @@ function nodesToReactNodes (nodes: TagNode[], values: ValueMap): ReactNode[] {
 
 function nodeToReactNode (node: TagNode, values: ValueMap): ReactNode {
     if (typeof node === 'string') return node
-    if (node.single) return values[node.name]
-    return cloneElement(values[node.name], undefined, ...nodesToReactNodes(node.children, values))
+    const valueEl = isValidElement(values[node.name]) ? values[node.name] : createElement(Fragment)
+    if (node.single) return valueEl
+    return cloneElement(valueEl, undefined, ...nodesToReactNodes(node.children, values))
 }
