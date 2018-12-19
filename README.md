@@ -1,6 +1,8 @@
 # inno-trans-react-element-plugin
 inno-trans plugin for react element interpolation.
 
+![npm](https://flat.badgen.net/npm/v/inno-trans-react-element-plugin)
+
 ## Install
 ```sh
 npm i inno-trans-react-element-plugin
