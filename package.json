@@ -1,7 +1,7 @@
 {
     "name": "inno-trans-react-element-plugin",
     "description": "inno-trans plugin for react element interpolation.",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "repository": "https://github.com/skt-t1-byungi/inno-trans-react-element-plugin.git",
     "author": "skt-t1-byungi <tiniwz@gmail.com>",
     "main": "lib/index.js",
