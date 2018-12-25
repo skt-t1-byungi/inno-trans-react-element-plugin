@@ -12,8 +12,8 @@ declare module 'inno-trans/lib/types' {
 }
 
 export = (trans: ITranslator): ITranslator => {
-    trans.rt = reactTrans
-    trans.rtc = reactTranceChoice
+    trans.rt = reactTrans.bind(trans)
+    trans.rtc = reactTranceChoice.bind(trans)
     return trans
 }
 
