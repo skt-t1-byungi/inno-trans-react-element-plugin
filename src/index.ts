@@ -4,10 +4,12 @@ import parseTag from 'tag-name-parser'
 
 type TagNode = ReturnType<typeof parseTag>[number]
 
+const DEFAULT_SYMBOL = '___INNO-TRANS-REACT-ELEMENT-PLUGIN___'
+
 declare module 'inno-trans/lib/types' {
     interface ITranslator {
-        rt (key: string, values: ValueMap, opts?: TransOptions): ReactElement<any>
-        rtc (key: string, num: number, values: ValueMap, opts?: TransOptions): ReactElement<any>
+        rt (key: string, values: ValueMap, opts?: TransOptions): ReactElement<any> | TransOptions['defaults']
+        rtc (key: string, num: number, values: ValueMap, opts?: TransOptions): ReactElement<any> | TransOptions['defaults']
     }
 }
 
@@ -17,12 +19,16 @@ export = (trans: ITranslator): ITranslator => {
     return trans
 }
 
-function reactTrans (this: ITranslator, key: string, values: ValueMap, opts?: TransOptions) {
-    return strToReactElement(this.trans(key, values, opts), values)
+function reactTrans (this: ITranslator, key: string, values: ValueMap, opts: TransOptions = {}) {
+    const str = this.trans(key, values, { ...opts, defaults: DEFAULT_SYMBOL })
+    if (str === DEFAULT_SYMBOL) return opts.defaults === undefined ? key : opts.defaults
+    return strToReactElement(str, values)
 }
 
-function reactTranceChoice (this: ITranslator, key: string, num: number, values: ValueMap, opts?: TransOptions) {
-    return strToReactElement(this.transChoice(key, num, values, opts), values)
+function reactTranceChoice (this: ITranslator, key: string, num: number, values: ValueMap, opts: TransOptions = {}) {
+    const str = this.transChoice(key, num, values, { ...opts, defaults: DEFAULT_SYMBOL })
+    if (str === DEFAULT_SYMBOL) return opts.defaults === undefined ? key : opts.defaults
+    return strToReactElement(str, values)
 }
 
 function strToReactElement (str: string, values: ValueMap) {

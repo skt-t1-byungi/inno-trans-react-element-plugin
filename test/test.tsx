@@ -4,9 +4,15 @@ import React from 'react'
 import InnoTransReactElementPlugin from '../src/index'
 
 InnoTrans.use(InnoTransReactElementPlugin)
-const trans = InnoTrans({ locale: 'ko', messages: { ko: { 'single|many': 'single<0/>test|many<0/>test' } } })
-const rt = (key: string, values: any) => trans.rt(key, values)
-const rtc = (key: string, num: number, values: any) => trans.rtc(key, num, values)
+const trans = InnoTrans({ locale: 'ko' })
+const rt = (key: string, values: any) => {
+    trans.addMessages('ko', { [key]: key })
+    return trans.rt(key, values)
+}
+const rtc = (key: string, num: number, values: any) => {
+    trans.addMessages('ko', { [key]: key })
+    return trans.rtc(key, num, values)
+}
 const macro: Macro<[any, any]> = (t, actual, expeceted) => t.deepEqual(actual, expeceted)
 
 test('string', macro,
@@ -45,6 +51,11 @@ test('if no value #2', macro,
 )
 
 test('rtc', macro,
-    rtc('single|many', 2, { 0: <br /> }),
-    <>many<br/>test</>
+    rtc('single|<0>many</0>', 2, { 0: <div /> }),
+    <><div>many</div></>
 )
+
+test('behaviors when there is no key', t => {
+    t.is(trans.rt('no message', { 0: <br/> }), 'no message')
+    t.is(trans.rt('no message', { 0: <br/> }, { defaults: 'test' }), 'test')
+})

@@ -50,6 +50,9 @@
         "compileEnhancements": false,
         "require": [
             "ts-node/register"
+        ],
+        "sources": [
+            "packages/*/*.{ts,tsx}"
         ]
     }
 }
